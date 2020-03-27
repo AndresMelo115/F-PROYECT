@@ -15,7 +15,7 @@ namespace ELECCIONES.Controllers
 
             return View("Adminpage");
         }
-
+     
 
         public IActionResult Index()
         {

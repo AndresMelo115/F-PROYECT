@@ -20,12 +20,14 @@ using AutoMapper;
 namespace ELECCIONES.Controllers
 {
     [Authorize]
+
     public class CandidatosController : Controller
     {
+
         private readonly EleccionesContext _context;
         private readonly IHostingEnvironment hostingEnvironment;
         private readonly IMapper _mapper;
-
+       
         public CandidatosController(EleccionesContext context,IHostingEnvironment hostingEnvironment,IMapper mapper)
         {
             _context = context;
