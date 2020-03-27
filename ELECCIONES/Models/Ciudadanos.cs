@@ -11,7 +11,7 @@ namespace ELECCIONES.Models
         }
 
         public int IdCiudadanos { get; set; }
-        public int Cedula { get; set; }
+        public long Cedula { get; set; }
         public string Nombre { get; set; }
         public string Apellido { get; set; }
         public string Email { get; set; }

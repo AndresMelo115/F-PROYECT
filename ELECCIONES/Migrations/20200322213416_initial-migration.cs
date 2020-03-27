@@ -13,7 +13,7 @@ namespace ELECCIONES.Migrations
                 {
                     id_Ciudadanos = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Cedula = table.Column<int>(nullable: false),
+                    Cedula = table.Column<long>(nullable: false),
                     Nombre = table.Column<string>(unicode: false, maxLength: 30, nullable: false),
                     Apellido = table.Column<string>(unicode: false, maxLength: 30, nullable: false),
                     Email = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
