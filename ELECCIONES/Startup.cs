@@ -11,11 +11,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using ELECCIONES.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
 using AutoMapper;
 using ELECCIONES.LDTO;
-using ELECCIONES.Models;
 using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
+
 
 
 
@@ -54,10 +54,12 @@ namespace ELECCIONES
                 {
                     options.Password.RequiredLength = 10;
                 })*/
-
-            
-
+                       
                 .AddDefaultTokenProviders();
+
+
+            services.AddDistributedMemoryCache();
+            services.AddSession();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
@@ -77,7 +79,7 @@ namespace ELECCIONES
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
-
+            app.UseSession();
             app.UseStaticFiles();
             app.UseAuthentication();
             app.UseMvc(routes =>

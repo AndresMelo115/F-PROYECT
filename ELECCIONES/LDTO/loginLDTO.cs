@@ -9,10 +9,10 @@ namespace ELECCIONES.LDTO
     public class LoginLDTO
     {
 
-        [Required]
+        [Required(ErrorMessage = "Favor ingresar nombre de usuario ")]
         public string UserName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Ingresar contraseña ")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 

@@ -5,21 +5,68 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ELECCIONES.Models;
+using System.Configuration;
+using System.Data.SqlClient;
+
+
+
+
+
 
 namespace ELECCIONES.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult admin()
-        {
 
-            return View("Adminpage");
-        }
-     
 
+        private readonly Ciudadanos _ciudadanos;
+
+        
+      
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Index(Ciudadanos _ciudadanos)           
+        {
+           
+            
+
+            
+
+            EleccionesContext _context = new EleccionesContext();
+
+            var test1 =  _context.Ciudadanos.Where(ced => ced.Cedula == _ciudadanos.Cedula).
+                FirstOrDefault();
+
+            if (test1.Estado == false)
+            {
+
+                ModelState.AddModelError("","Ciudadano inactivo");
+                return View(_ciudadanos);
+            }
+
+            /*if (test ==1)
+            {
+                return View("Votacion", _ciudadanos);
+            }
+            else { }*/
+            return View();
+
+        }
+
+
+        public IActionResult admin()
+        {
+            Ciudadanos cedula = new Ciudadanos();
+
+
+
+            return View("Adminpage");
         }
 
         public IActionResult Privacy()

@@ -1,4 +1,5 @@
-﻿@using Microsoft.AspNetCore.Identity;
+﻿@model Ciudadanos
+@using Microsoft.AspNetCore.Identity;
 @inject SignInManager<IdentityUser> SignInManager;
 
 @{
@@ -7,53 +8,7 @@
 
 <div class="text-center">
 
-    <header>
-        <div class="bg-dark collapse" id="navbarHeader" style="" >
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-8 col-md-7 py-4">
-                        <h4 class="text-white">About</h4>
 
-                    </div>
-                    <div class="col-sm-4 offset-md-1 py-4">
-                        <h4 class="text-white">Sistema De Elecciones</h4>
-                        <ul class="list-unstyled">
-                            @if (SignInManager.IsSignedIn(User))
-                            {
-                                <li><a asp-controller="Administrador" asp-action="Index" class="text-white font-weight-bolder">@User.Identity.Name</a></li>
-                            }
-
-
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="navbar navbar-dark bg-dark shadow-sm">
-
-
-            @if (SignInManager.IsSignedIn(User))
-            {
-
-                <a asp-controller="Account" asp-action="Logout" class="text-white font-weight-bold">
-
-                    Log Out
-                </a>
-                <span class="text-white"> @User.Identity.Name</span>
-
-
-
-            }
-
-
-            <a asp-action="Login" asp-controller="account" class="btn btn-primary my-1r">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="mr-2" viewBox="0 0 24 24" focusable="false"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-                <strong>Login</strong>
-            </a>
-
-        </div>
-
-    </header>
 
     <h1>Sistema Electoral</h1>
     <p class="lead text-muted">
@@ -61,11 +16,31 @@
     </p>
     <p>
 
-        <a asp-action="Login" asp-controller="account" class="btn btn-primary my-2"><i style="font-size: 30px;" class="fa fa-camera" aria-hidden="true"></i>Log in Admin </a>
+        <a asp-action="Login" asp-controller="account" class="btn btn-primary my-2"><i style="font-size: 30px;"  class="fa fa-lock" aria-hidden="true"> </i>Log in Admin </a>
 
-
-
-        <a href="#" class="btn btn-primary my-2">Votar</a>
     </p>
+    <div class="card-body">
+        <form asp-action="Index">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Cedula">Introdusca su Cedula</label>
+                <input asp-for="Cedula" typeof="Number" class="form-control" id="InputCedula">
+                <span asp-validation-for="Cedula" class="text-danger"></span>
 
+            </div>
+            <button type="submit" class="btn btn-danger">Continuar</button>
+        </form>
+        
+
+
+
+
+
+        @*<form action="Home/Index " method="post">
+            <label for="id">Introdusca su Cedula <a /> </label>
+            <input id="id" type="number" name="Ced" value="" />
+            <button type="submit"> Continuar </button>
+        </form>*@
+    </div>
+    
 </div>

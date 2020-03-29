@@ -13,11 +13,19 @@ namespace ELECCIONES.LDTO
 
         
         public int IdCandidatos { get; set; }
+
+        [Required(ErrorMessage = "Informacion requerida")]
         public string Nombre { get; set; }
+
+        [Required(ErrorMessage = "Informacion requerida")]
         public string Apellido { get; set; }
+
         public int PartidoPertenece { get; set; }
+
         public int PuestoAspira { get; set; }
 
+        [Required(ErrorMessage ="Seleccionar imagen")]
+        
         public IFormFile Foto { get; set; }
 
         public bool? Estado { get; set; }

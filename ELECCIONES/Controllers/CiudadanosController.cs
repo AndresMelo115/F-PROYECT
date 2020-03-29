@@ -6,12 +6,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ELECCIONES.Models;
+using Microsoft.AspNetCore.Authorization;
+using ELECCIONES.LDTO;
 
 namespace ELECCIONES.Controllers
 {
+    [Authorize]
     public class CiudadanosController : Controller
     {
         private readonly EleccionesContext _context;
+
+
+     
 
         public CiudadanosController(EleccionesContext context)
         {

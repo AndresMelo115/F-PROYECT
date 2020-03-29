@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using ELECCIONES.LDTO;
+using ELECCIONES.Models;
+using System.Linq;
 
 namespace ELECCIONES.Models
 {
