@@ -21,7 +21,7 @@ namespace ELECCIONES.Controllers
         // GET: Resultadoes
         public async Task<IActionResult> Index()
         {
-            var eleccionesContext = _context.Resultado.Include(r => r.IdEleccionesNavigation);
+            var eleccionesContext = _context.Resultado.Include(r => r.IdCandidatosNavigation).Include(r => r.IdCiudadanosNavigation).Include(r => r.IdEleccionesNavigation);
             return View(await eleccionesContext.ToListAsync());
         }
 
@@ -34,6 +34,8 @@ namespace ELECCIONES.Controllers
             }
 
             var resultado = await _context.Resultado
+                .Include(r => r.IdCandidatosNavigation)
+                .Include(r => r.IdCiudadanosNavigation)
                 .Include(r => r.IdEleccionesNavigation)
                 .FirstOrDefaultAsync(m => m.IdResultado == id);
             if (resultado == null)
@@ -47,7 +49,9 @@ namespace ELECCIONES.Controllers
         // GET: Resultadoes/Create
         public IActionResult Create()
         {
-            ViewData["IdElecciones"] = new SelectList(_context.Elecciones, "IdElecciones", "FechaRealizacion");
+            ViewData["IdCandidatos"] = new SelectList(_context.Candidatos, "IdCandidatos", "Apellido");
+            ViewData["IdCiudadanos"] = new SelectList(_context.Ciudadanos, "IdCiudadanos", "Apellido");
+            ViewData["IdElecciones"] = new SelectList(_context.Elecciones, "IdElecciones", "Nombre");
             return View();
         }
 
@@ -56,7 +60,7 @@ namespace ELECCIONES.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdResultado,ResultadoTotal,IdElecciones")] Resultado resultado)
+        public async Task<IActionResult> Create([Bind("IdResultado,IdElecciones,IdCandidatos,IdCiudadanos")] Resultado resultado)
         {
             if (ModelState.IsValid)
             {
@@ -64,7 +68,9 @@ namespace ELECCIONES.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdElecciones"] = new SelectList(_context.Elecciones, "IdElecciones", "FechaRealizacion", resultado.IdElecciones);
+            ViewData["IdCandidatos"] = new SelectList(_context.Candidatos, "IdCandidatos", "Apellido", resultado.IdCandidatos);
+            ViewData["IdCiudadanos"] = new SelectList(_context.Ciudadanos, "IdCiudadanos", "Apellido", resultado.IdCiudadanos);
+            ViewData["IdElecciones"] = new SelectList(_context.Elecciones, "IdElecciones", "Nombre", resultado.IdElecciones);
             return View(resultado);
         }
 
@@ -81,7 +87,9 @@ namespace ELECCIONES.Controllers
             {
                 return NotFound();
             }
-            ViewData["IdElecciones"] = new SelectList(_context.Elecciones, "IdElecciones", "FechaRealizacion", resultado.IdElecciones);
+            ViewData["IdCandidatos"] = new SelectList(_context.Candidatos, "IdCandidatos", "Apellido", resultado.IdCandidatos);
+            ViewData["IdCiudadanos"] = new SelectList(_context.Ciudadanos, "IdCiudadanos", "Apellido", resultado.IdCiudadanos);
+            ViewData["IdElecciones"] = new SelectList(_context.Elecciones, "IdElecciones", "Nombre", resultado.IdElecciones);
             return View(resultado);
         }
 
@@ -90,7 +98,7 @@ namespace ELECCIONES.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdResultado,ResultadoTotal,IdElecciones")] Resultado resultado)
+        public async Task<IActionResult> Edit(int id, [Bind("IdResultado,IdElecciones,IdCandidatos,IdCiudadanos")] Resultado resultado)
         {
             if (id != resultado.IdResultado)
             {
@@ -117,7 +125,9 @@ namespace ELECCIONES.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdElecciones"] = new SelectList(_context.Elecciones, "IdElecciones", "FechaRealizacion", resultado.IdElecciones);
+            ViewData["IdCandidatos"] = new SelectList(_context.Candidatos, "IdCandidatos", "Apellido", resultado.IdCandidatos);
+            ViewData["IdCiudadanos"] = new SelectList(_context.Ciudadanos, "IdCiudadanos", "Apellido", resultado.IdCiudadanos);
+            ViewData["IdElecciones"] = new SelectList(_context.Elecciones, "IdElecciones", "Nombre", resultado.IdElecciones);
             return View(resultado);
         }
 
@@ -130,6 +140,8 @@ namespace ELECCIONES.Controllers
             }
 
             var resultado = await _context.Resultado
+                .Include(r => r.IdCandidatosNavigation)
+                .Include(r => r.IdCiudadanosNavigation)
                 .Include(r => r.IdEleccionesNavigation)
                 .FirstOrDefaultAsync(m => m.IdResultado == id);
             if (resultado == null)

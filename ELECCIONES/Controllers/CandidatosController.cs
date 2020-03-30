@@ -27,8 +27,8 @@ namespace ELECCIONES.Controllers
         private readonly EleccionesContext _context;
         private readonly IHostingEnvironment hostingEnvironment;
         private readonly IMapper _mapper;
-       
-        public CandidatosController(EleccionesContext context,IHostingEnvironment hostingEnvironment,IMapper mapper)
+
+        public CandidatosController(EleccionesContext context, IHostingEnvironment hostingEnvironment, IMapper mapper)
         {
             _context = context;
             this.hostingEnvironment = hostingEnvironment;
@@ -82,7 +82,7 @@ namespace ELECCIONES.Controllers
             {
 
                 string uniqueName = null;
-                if(model.Foto != null)
+                if (model.Foto != null)
                 {
                     var folderPath = Path.Combine(hostingEnvironment.WebRootPath, "images");
                     uniqueName = Guid.NewGuid().ToString() + "_" + model.Foto.FileName;
@@ -100,8 +100,8 @@ namespace ELECCIONES.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-           /* ViewData["PartidoPertenece"] = new SelectList(_context.Partidos, "IdPartidos", "Descripcion", candidatos.PartidoPertenece);
-            ViewData["PuestoAspira"] = new SelectList(_context.PuestoElecto, "IdPuestoE", "Descripcion", candidatos.PuestoAspira);*/
+            /* ViewData["PartidoPertenece"] = new SelectList(_context.Partidos, "IdPartidos", "Descripcion", candidatos.PartidoPertenece);
+             ViewData["PuestoAspira"] = new SelectList(_context.PuestoElecto, "IdPuestoE", "Descripcion", candidatos.PuestoAspira);*/
             return View(model);
         }
 
@@ -130,7 +130,7 @@ namespace ELECCIONES.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id,  CandidatosLDTO lDTO)
+        public async Task<IActionResult> Edit(int id, CandidatosLDTO lDTO)
         {
             if (id != lDTO.IdCandidatos)
             {
@@ -152,20 +152,30 @@ namespace ELECCIONES.Controllers
                         var filePath = Path.Combine(folderPath, uniqueName);
 
 
-                        
+
 
                         if (!string.IsNullOrEmpty(candidato.FotoPerfil))
                         {
                             var filePathEliminar = Path.Combine(folderPath, candidato.FotoPerfil);
                             if (System.IO.File.Exists(filePathEliminar))
                             {
-                                var fileInfo = new System.IO.FileInfo(filePathEliminar);
-                                fileInfo.Delete();
+                                //var fileInfo = new System.IO.FileInfo(filePathEliminar);
+                                //fileInfo.Delete();
+                                System.IO.File.Delete(filePathEliminar);
                             }
                         }
 
+                        //el problema qcre que esta en esta linea, la voy a cambiar ok? dale 
 
-                        if (filePath != null) lDTO.Foto.CopyTo(new FileStream(filePath, mode: FileMode.Create));
+                        if(filePath!=null)
+                        {
+                            using (var fs = new FileStream(filePath, FileMode.Create))
+                            {
+                                lDTO.Foto.CopyTo(fs);
+                            }
+                        }
+
+                        //if (filePath != null) lDTO.Foto.CopyTo(new FileStream(filePath, mode: FileMode.Create));
                     }
 
                     candidato.Nombre = lDTO.Nombre;
@@ -209,8 +219,8 @@ namespace ELECCIONES.Controllers
 
             var candidatos = await _context.Candidatos
 
-               /* .Include(c => c.PartidoPerteneceNavigation)
-                .Include(c => c.PuestoAspiraNavigation)*/
+                /* .Include(c => c.PartidoPerteneceNavigation)
+                 .Include(c => c.PuestoAspiraNavigation)*/
                 .FirstOrDefaultAsync(m => m.IdCandidatos == id);
             if (candidatos == null)
             {

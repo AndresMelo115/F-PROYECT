@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using ELECCIONES.LDTO;
-using ELECCIONES.Models;
-using System.Linq;
 
 namespace ELECCIONES.Models
 {
@@ -10,7 +7,7 @@ namespace ELECCIONES.Models
     {
         public Ciudadanos()
         {
-            Elecciones = new HashSet<Elecciones>();
+            Resultado = new HashSet<Resultado>();
         }
 
         public int IdCiudadanos { get; set; }
@@ -20,6 +17,6 @@ namespace ELECCIONES.Models
         public string Email { get; set; }
         public bool Estado { get; set; }
 
-        public virtual ICollection<Elecciones> Elecciones { get; set; }
+        public virtual ICollection<Resultado> Resultado { get; set; }
     }
 }

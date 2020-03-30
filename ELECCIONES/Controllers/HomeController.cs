@@ -43,6 +43,12 @@ namespace ELECCIONES.Controllers
             var test1 =  _context.Ciudadanos.Where(ced => ced.Cedula == _ciudadanos.Cedula).
                 FirstOrDefault();
 
+            if(test1 == null)
+            {
+                ModelState.AddModelError("","Cidadano no existe");
+                return View();
+            }
+
             if (test1.Estado == false)
             {
 
@@ -55,9 +61,10 @@ namespace ELECCIONES.Controllers
                 return View("Votacion", _ciudadanos);
             }
             else { }*/
-            return View();
+           return View("votacion", _ciudadanos);
 
         }
+
 
 
         public IActionResult admin()

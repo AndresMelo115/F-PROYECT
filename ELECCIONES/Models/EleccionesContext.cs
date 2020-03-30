@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
-
 namespace ELECCIONES.Models
 {
     public partial class EleccionesContext : IdentityDbContext
@@ -17,7 +16,7 @@ namespace ELECCIONES.Models
         {
         }
 
-       
+
         public virtual DbSet<Candidatos> Candidatos { get; set; }
         public virtual DbSet<Ciudadanos> Ciudadanos { get; set; }
         public virtual DbSet<Elecciones> Elecciones { get; set; }
@@ -37,8 +36,10 @@ namespace ELECCIONES.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
             modelBuilder.HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
 
+           
             modelBuilder.Entity<Candidatos>(entity =>
             {
                 entity.HasKey(e => e.IdCandidatos)
@@ -53,7 +54,7 @@ namespace ELECCIONES.Models
 
                 entity.Property(e => e.FotoPerfil)
                     .HasColumnName("Foto_Perfil")
-                    .HasMaxLength(50)
+                    .HasMaxLength(300)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Nombre)
@@ -109,31 +110,13 @@ namespace ELECCIONES.Models
                 entity.Property(e => e.IdElecciones).HasColumnName("id_Elecciones");
 
                 entity.Property(e => e.FechaRealizacion)
-                    .IsRequired()
                     .HasColumnName("Fecha_Realizacion")
-                    .HasMaxLength(30)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.IdCandidatos).HasColumnName("idCandidatos");
-
-                entity.Property(e => e.IdCiudadanos).HasColumnName("idCiudadanos");
+                    .HasColumnType("date");
 
                 entity.Property(e => e.Nombre)
                     .IsRequired()
                     .HasMaxLength(30)
                     .IsUnicode(false);
-
-                entity.HasOne(d => d.IdCandidatosNavigation)
-                    .WithMany(p => p.Elecciones)
-                    .HasForeignKey(d => d.IdCandidatos)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Candidatos");
-
-                entity.HasOne(d => d.IdCiudadanosNavigation)
-                    .WithMany(p => p.Elecciones)
-                    .HasForeignKey(d => d.IdCiudadanos)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Ciudadanos");
             });
 
             modelBuilder.Entity<Partidos>(entity =>
@@ -150,7 +133,7 @@ namespace ELECCIONES.Models
 
                 entity.Property(e => e.LogoPartido)
                     .HasColumnName("Logo_Partido")
-                    .HasMaxLength(50)
+                    .HasMaxLength(300)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Nombre)
@@ -186,15 +169,26 @@ namespace ELECCIONES.Models
 
                 entity.Property(e => e.IdResultado).HasColumnName("id_Resultado");
 
+                entity.Property(e => e.IdCandidatos).HasColumnName("idCandidatos");
+
+                entity.Property(e => e.IdCiudadanos).HasColumnName("idCiudadanos");
+
                 entity.Property(e => e.IdElecciones).HasColumnName("idElecciones");
 
-                entity.Property(e => e.ResultadoTotal).HasColumnName("Resultado_Total");
+                entity.HasOne(d => d.IdCandidatosNavigation)
+                    .WithMany(p => p.Resultado)
+                    .HasForeignKey(d => d.IdCandidatos)
+                    .HasConstraintName("FK_Resultado_Candidatos");
+
+                entity.HasOne(d => d.IdCiudadanosNavigation)
+                    .WithMany(p => p.Resultado)
+                    .HasForeignKey(d => d.IdCiudadanos)
+                    .HasConstraintName("FK_Resultado_Ciudadanos");
 
                 entity.HasOne(d => d.IdEleccionesNavigation)
                     .WithMany(p => p.Resultado)
                     .HasForeignKey(d => d.IdElecciones)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Elecciones");
+                    .HasConstraintName("FK_Resultado_Elecciones");
             });
         }
     }
