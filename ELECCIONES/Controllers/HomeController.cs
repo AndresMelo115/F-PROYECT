@@ -12,25 +12,20 @@ namespace ELECCIONES.Controllers
 {
     public class HomeController : Controller
     {
-
-
         private readonly Ciudadanos _ciudadanos;
         private readonly EleccionesContext _context;
         //private readonly PuestoElecto context;
-
+        
         public HomeController(EleccionesContext context)
         {
             this._context = context;
-        }
+        }  
 
 
         public IActionResult Votacion()
-        {
-            
-
+        {          
             return View(_context.PuestoElecto.ToList());
-        }
-
+        }       
 
 
         [HttpGet]
@@ -47,8 +42,7 @@ namespace ELECCIONES.Controllers
             EleccionesContext _context = new EleccionesContext();
 
             var test1 =  _context.Ciudadanos.Where(ced => ced.Cedula == _ciudadanos.Cedula).
-                FirstOrDefault();
-            
+                FirstOrDefault();            
 
             if(test1 == null)
             {
@@ -61,23 +55,26 @@ namespace ELECCIONES.Controllers
 
                 ModelState.AddModelError("","Ciudadano inactivo");
                 return View(_ciudadanos);
-            }
-
-          
+            }          
            return RedirectToAction("votacion");
 
         }
-        //public PuestoElecto(EleccionesContext context)
-        //{
-        //    _context2 = context;
-        //}
+        public async Task <IActionResult> ProcesoVotacion(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        //// GET: PuestoElectoes
-        //public async Task<IActionResult> Index2()
-        //{
-        //    return View(await _context2.PuestoElecto.ToListAsync());
-        //}
+            var puestoElecto = await _context.PuestoElecto
+                .FirstOrDefaultAsync(m => m.IdPuestoE == id);
+            if (puestoElecto == null)
+            {
+                return NotFound();
+            }
+            return View(puestoElecto);
 
+        }
 
         public IActionResult admin()
         {
