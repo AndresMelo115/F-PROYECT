@@ -66,13 +66,24 @@ namespace ELECCIONES.Controllers
                 return NotFound();
             }
 
-            var puestoElecto = await _context.PuestoElecto
-                .FirstOrDefaultAsync(m => m.IdPuestoE == id);
-            if (puestoElecto == null)
+
+            //var candidatos = await _context.Candidatos
+            //    .Where(cand => cand.PuestoAspira == id)
+            //   .Include(c => c.PartidoPerteneceNavigation)
+            //   .Include(c => c.PuestoAspiraNavigation)
+            //   .FirstOrDefaultAsync();
+
+            var Candidatos = _context.Candidatos
+                .Where(cand => cand.PuestoAspira == id)
+                .Include(c => c.PartidoPerteneceNavigation)
+                .Include(c => c.PuestoAspiraNavigation);
+
+
+            if (Candidatos == null)
             {
                 return NotFound();
             }
-            return View(puestoElecto);
+            return View(await Candidatos.ToListAsync());
 
         }
 
