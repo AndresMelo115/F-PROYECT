@@ -42,6 +42,7 @@ namespace ELECCIONES.Controllers
             return View(elecciones);
         }
 
+
         // GET: Elecciones/Create
         public IActionResult Create()
         {

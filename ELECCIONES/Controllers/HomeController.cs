@@ -5,12 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ELECCIONES.Models;
-using System.Configuration;
-using System.Data.SqlClient;
-
-
-
-
+using Microsoft.EntityFrameworkCore;
 
 
 namespace ELECCIONES.Controllers
@@ -20,9 +15,24 @@ namespace ELECCIONES.Controllers
 
 
         private readonly Ciudadanos _ciudadanos;
+        private readonly EleccionesContext _context;
+        //private readonly PuestoElecto context;
 
-        
-      
+        public HomeController(EleccionesContext context)
+        {
+            this._context = context;
+        }
+
+
+        public IActionResult Votacion()
+        {
+            
+
+            return View(_context.PuestoElecto.ToList());
+        }
+
+
+
         [HttpGet]
         public IActionResult Index()
         {
@@ -31,17 +41,14 @@ namespace ELECCIONES.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Index(Ciudadanos _ciudadanos)           
-        {
-           
-            
-
-            
+        public async Task<IActionResult> Index(Ciudadanos _ciudadanos)
+      {             
 
             EleccionesContext _context = new EleccionesContext();
 
             var test1 =  _context.Ciudadanos.Where(ced => ced.Cedula == _ciudadanos.Cedula).
                 FirstOrDefault();
+            
 
             if(test1 == null)
             {
@@ -56,20 +63,25 @@ namespace ELECCIONES.Controllers
                 return View(_ciudadanos);
             }
 
-            /*if (test ==1)
-            {
-                return View("Votacion", _ciudadanos);
-            }
-            else { }*/
-           return View("votacion", _ciudadanos);
+          
+           return RedirectToAction("votacion");
 
         }
+        //public PuestoElecto(EleccionesContext context)
+        //{
+        //    _context2 = context;
+        //}
 
+        //// GET: PuestoElectoes
+        //public async Task<IActionResult> Index2()
+        //{
+        //    return View(await _context2.PuestoElecto.ToListAsync());
+        //}
 
 
         public IActionResult admin()
         {
-            Ciudadanos cedula = new Ciudadanos();
+            //Ciudadanos cedula = new Ciudadanos();
 
 
 

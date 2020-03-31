@@ -1,4 +1,4 @@
-﻿@model Ciudadanos
+﻿@model IEnumerable<ELECCIONES.Models.PuestoElecto>
 
 @{
     ViewData["Title"] = "Votacion";
@@ -6,8 +6,49 @@
 
 <h1>Votacion</h1>
 
-
 <table class=" table table-bordered"
-       <tr>
-           <td>@Model.Cedula</td>
-       </tr>
+      <tr>
+        @*
+        <td>@Model.Cedula @ViewBag.ciudadano</td>*@
+      </tr>
+    
+      <thead>
+        <tr>
+             <th>
+              @Html.DisplayNameFor(model => model.Nombre)
+          </th>
+          <th>
+              @Html.DisplayNameFor(model => model.Descripcion)
+          </th>
+          <th>
+              @Html.DisplayNameFor(model => model.Estado)
+          </th>
+        </tr>         
+      </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(model => item.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Descripcion)
+            </td>
+            <td>
+                
+                @if (item.Estado == true)
+                {
+                    <p>Acvitov</p>
+                }
+            </td>
+
+           @* <a asp-action="Edit" asp-route-id="@item.IdPuestoE">Edit</a>*@
+
+        </tr>
+                       
+        }
+    </tbody>
+
+</table>

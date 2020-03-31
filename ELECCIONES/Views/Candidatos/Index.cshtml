@@ -19,14 +19,12 @@
             <th>
                 @Html.DisplayNameFor(model => model.Apellido)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FotoPerfil)
-            </th>
+         
             <th>
                 @Html.DisplayNameFor(model => model.Estado)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PartidoPerteneceNavigation)
+                @Html.DisplayNameFor(model => model.PartidoPerteneceNavigation) 
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.PuestoAspiraNavigation)
@@ -48,11 +46,17 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Apellido)
                 </td>
+           
                 <td>
-                    @Html.DisplayFor(modelItem => item.FotoPerfil)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Estado)
+
+                    @if (item.Estado == true)
+                    {
+                        <p>Activo</p>
+                    }
+                    else
+                    {
+                       <p>Inactivo</p>
+                    }
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.PartidoPerteneceNavigation.Descripcion)
