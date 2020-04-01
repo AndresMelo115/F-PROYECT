@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using ELECCIONES.Models;
 using Microsoft.AspNetCore.Authorization;
 using ELECCIONES.LDTO;
+using Microsoft.AspNetCore.Http;
+using ELECCIONES.Helper;
+using System.Diagnostics;
 
 namespace ELECCIONES.Controllers
 {
@@ -27,7 +30,10 @@ namespace ELECCIONES.Controllers
         // GET: Ciudadanos
         public async Task<IActionResult> Index()
         {
+            
+
             return View(await _context.Ciudadanos.ToListAsync());
+                       
         }
 
         // GET: Ciudadanos/Details/5

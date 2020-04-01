@@ -5,7 +5,11 @@ using System.Threading.Tasks;
 
 namespace ELECCIONES.Helper
 {
-    public class Configuracion
+    public static class Configuracion
     {
+        public static string KeyNombre => "_nam";
+
+        public static string KeyApellido => "_Lastnam";
+
     }
 }

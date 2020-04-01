@@ -34,7 +34,15 @@
                 @Html.DisplayFor(modelItem => item.FechaRealizacion)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Estado)
+
+                @if (item.Estado == true)
+                {
+                    <p>En Curso</p>
+                }
+                else
+                {
+                    <p>Terminada</p>
+                }
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.IdElecciones">Edit</a> |

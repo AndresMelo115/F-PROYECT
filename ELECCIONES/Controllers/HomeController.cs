@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ELECCIONES.Models;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.AspNetCore.Http;
+using ELECCIONES.Helper;
 
 namespace ELECCIONES.Controllers
 {
@@ -21,9 +22,19 @@ namespace ELECCIONES.Controllers
             this._context = context;
         }  
 
+        public IActionResult Resultado()
+        {
+            return View("ProcesoVotacion","Resultadoes");
+        }
+
 
         public IActionResult Votacion()
-        {          
+        {
+            //Ciudadanos ciudadanos = new Ciudadanos();
+
+            ViewBag.NombreSession = HttpContext.Session.GetString(Configuracion.KeyNombre);
+            ViewBag.ApellidoSession = HttpContext.Session.GetString(Configuracion.KeyApellido);
+
             return View(_context.PuestoElecto.ToList());
         }       
 
@@ -31,13 +42,15 @@ namespace ELECCIONES.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+
             return View();
         }
 
 
         [HttpPost]
         public async Task<IActionResult> Index(Ciudadanos _ciudadanos)
-      {             
+      {
+            //Ciudadanos ciudadanos = new Ciudadanos();
 
             EleccionesContext _context = new EleccionesContext();
 
@@ -46,7 +59,7 @@ namespace ELECCIONES.Controllers
 
             if(test1 == null)
             {
-                ModelState.AddModelError("","Cidadano no existe");
+                ModelState.AddModelError("","Ciudadano no existe en el padron");
                 return View();
             }
 
@@ -55,8 +68,11 @@ namespace ELECCIONES.Controllers
 
                 ModelState.AddModelError("","Ciudadano inactivo");
                 return View(_ciudadanos);
-            }          
-           return RedirectToAction("votacion");
+            }
+
+            HttpContext.Session.SetString(Configuracion.KeyNombre,test1.Nombre);
+            HttpContext.Session.SetString(Configuracion.KeyApellido, test1.Apellido);
+            return RedirectToAction("votacion");
 
         }
         public async Task <IActionResult> ProcesoVotacion(int? id)
@@ -66,17 +82,16 @@ namespace ELECCIONES.Controllers
                 return NotFound();
             }
 
-
-            //var candidatos = await _context.Candidatos
-            //    .Where(cand => cand.PuestoAspira == id)
-            //   .Include(c => c.PartidoPerteneceNavigation)
-            //   .Include(c => c.PuestoAspiraNavigation)
-            //   .FirstOrDefaultAsync();
+            var test2 = _context.PuestoElecto.Where(Pues => Pues.IdPuestoE == id).
+               FirstOrDefault();
 
             var Candidatos = _context.Candidatos
                 .Where(cand => cand.PuestoAspira == id)
                 .Include(c => c.PartidoPerteneceNavigation)
                 .Include(c => c.PuestoAspiraNavigation);
+
+            ViewBag.Puestoelegido =test2.Nombre;
+
 
 
             if (Candidatos == null)

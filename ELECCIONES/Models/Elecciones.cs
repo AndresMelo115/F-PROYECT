@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ELECCIONES.Models
 {
@@ -12,6 +13,7 @@ namespace ELECCIONES.Models
 
         public int IdElecciones { get; set; }
         public string Nombre { get; set; }
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime FechaRealizacion { get; set; }
         public bool Estado { get; set; }
 

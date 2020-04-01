@@ -21,6 +21,7 @@ namespace ELECCIONES.Controllers
         // GET: Elecciones
         public async Task<IActionResult> Index()
         {
+            
             return View(await _context.Elecciones.ToListAsync());
         }
 
@@ -149,5 +150,6 @@ namespace ELECCIONES.Controllers
         {
             return _context.Elecciones.Any(e => e.IdElecciones == id);
         }
+
     }
 }
