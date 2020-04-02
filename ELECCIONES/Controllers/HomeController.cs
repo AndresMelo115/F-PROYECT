@@ -132,6 +132,8 @@ namespace ELECCIONES.Controllers
             return View("Votacion");
         }
 
+
+
         public IActionResult admin()
         {
             //Ciudadanos cedula = new Ciudadanos();

@@ -11,6 +11,7 @@ using ELECCIONES.LDTO;
 using Microsoft.AspNetCore.Http;
 using ELECCIONES.Helper;
 using System.Diagnostics;
+using ELECCIONES.Email;
 
 namespace ELECCIONES.Controllers
 {
@@ -18,19 +19,25 @@ namespace ELECCIONES.Controllers
     public class CiudadanosController : Controller
     {
         private readonly EleccionesContext _context;
+        private readonly IEmailSender _emailSender;
 
 
      
 
-        public CiudadanosController(EleccionesContext context)
+        public CiudadanosController(EleccionesContext context, IEmailSender emailSender)
         {
             _context = context;
+            this._emailSender = emailSender;
         }
 
         // GET: Ciudadanos
         public async Task<IActionResult> Index()
         {
             
+
+            var message = new Message(new string[] { "Sandy.encarnacion.se@gmail.com" }, "Test Email", "Viendo KLOK con esto");
+
+            await _emailSender.SendEmailAsync(message);
 
             return View(await _context.Ciudadanos.ToListAsync());
                        

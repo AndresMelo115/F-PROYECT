@@ -14,7 +14,8 @@ using Microsoft.AspNetCore.Identity;
 using AutoMapper;
 using ELECCIONES.LDTO;
 using System.Reflection;
-//using ELECCIONES.Email;
+using ELECCIONES.Email;
+
 
 
 
@@ -33,13 +34,19 @@ namespace ELECCIONES
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //var emailConfig = Configuration.GetSection("EmailConfiguration").
-            //    Get<EmailConfiguration>();
+            var emailConfig = Configuration.GetSection("EmailConfiguration").
+                Get<EmailConfiguration>();
 
-            //services.AddSingleton(emailConfig);
-            
+            services.AddSingleton(emailConfig);
+
+            services.AddScoped<IEmailSender , EmailSenderGmail>();
+
+
             services.AddAutoMapper(typeof(AutomapperProfile).GetTypeInfo().Assembly);
+
             services.AddAutoMapper(typeof(AutoMappinPartidos).GetTypeInfo().Assembly);
+
+
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -48,8 +55,10 @@ namespace ELECCIONES
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+
             services.AddDbContext<EleccionesContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("Elecciones")));
+
 
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<EleccionesContext>()

@@ -1,0 +1,55 @@
+﻿@model ELECCIONES.Models.Candidatos
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Candidatos</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Apellido)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Apellido)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.FotoPerfil)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.FotoPerfil)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Estado)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Estado)
+        </dd>
+        <a href="~/Views/Candidatos/Edit.cshtml">~/Views/Candidatos/Edit.cshtml</a>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PartidoPerteneceNavigation)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PartidoPerteneceNavigation.Descripcion)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PuestoAspiraNavigation)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PuestoAspiraNavigation.Descripcion)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.IdCandidatos">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

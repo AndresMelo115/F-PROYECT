@@ -33,6 +33,7 @@ namespace ELECCIONES.Controllers
             _context = context;
             this.hostingEnvironment = hostingEnvironment;
             this._mapper = mapper;
+            
         }
 
         // GET: Candidatos
