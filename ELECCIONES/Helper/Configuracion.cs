@@ -7,9 +7,12 @@ namespace ELECCIONES.Helper
 {
     public static class Configuracion
     {
-        public static string KeyNombre => "_nam";
+        public static string KeyNombre => " _nam";
 
-        public static string KeyApellido => "_Lastnam";
+        public static string KeyApellido => " _Lastnam";
+
+        public static string KeyCedudala => " _Cedul";
+
 
     }
 }

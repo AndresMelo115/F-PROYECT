@@ -42,7 +42,7 @@ namespace ELECCIONES.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-
+           
             return View();
         }
 
@@ -51,6 +51,8 @@ namespace ELECCIONES.Controllers
         public async Task<IActionResult> Index(Ciudadanos _ciudadanos)
       {
             //Ciudadanos ciudadanos = new Ciudadanos();
+            
+
 
             EleccionesContext _context = new EleccionesContext();
 
@@ -69,9 +71,9 @@ namespace ELECCIONES.Controllers
                 ModelState.AddModelError("","Ciudadano inactivo");
                 return View(_ciudadanos);
             }
-
+            HttpContext.Session.SetInt32(Configuracion.KeyCedudala, test1.IdCiudadanos);
             HttpContext.Session.SetString(Configuracion.KeyNombre,test1.Nombre);
-            HttpContext.Session.SetString(Configuracion.KeyApellido, test1.Apellido);
+            HttpContext.Session.SetString(Configuracion.KeyApellido,test1.Apellido);
             return RedirectToAction("votacion");
 
         }
@@ -90,7 +92,7 @@ namespace ELECCIONES.Controllers
                 .Include(c => c.PartidoPerteneceNavigation)
                 .Include(c => c.PuestoAspiraNavigation);
 
-            ViewBag.Puestoelegido =test2.Nombre;
+            ViewBag.Puestoelegido = test2.Nombre;
 
 
 
@@ -102,12 +104,37 @@ namespace ELECCIONES.Controllers
 
         }
 
+        //[HttpGet]
+        //public IActionResult Votar(int? id)
+        //{
+        //    return View();
+        //}
+
+        
+        public async Task<IActionResult> Votar( int? id)
+        {
+            Resultado _resultado = new Resultado();
+            var Test3 = _context.Elecciones.Where(ele => ele.Estado == true).
+               FirstOrDefault(); 
+            
+
+            if (ModelState.IsValid)
+            {
+                _resultado.IdCandidatos = id;
+                _resultado.IdCiudadanos = HttpContext.Session.GetInt32(Configuracion.KeyCedudala);
+                _resultado.IdElecciones =Test3.IdElecciones;
+
+                _context.Add(_resultado);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Votacion));
+            }
+        
+            return View("Votacion");
+        }
+
         public IActionResult admin()
         {
             //Ciudadanos cedula = new Ciudadanos();
-
-
-
             return View("Adminpage");
         }
 

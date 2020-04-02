@@ -219,8 +219,8 @@ namespace ELECCIONES.Controllers
 
             var candidatos = await _context.Candidatos
 
-                /* .Include(c => c.PartidoPerteneceNavigation)
-                 .Include(c => c.PuestoAspiraNavigation)*/
+                 .Include(c => c.PartidoPerteneceNavigation)
+                 .Include(c => c.PuestoAspiraNavigation)
                 .FirstOrDefaultAsync(m => m.IdCandidatos == id);
             if (candidatos == null)
             {

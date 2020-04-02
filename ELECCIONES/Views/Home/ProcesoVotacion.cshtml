@@ -3,7 +3,7 @@
     ViewData["Title"] = "ProcesoVotacion";
 }
 
-<h1>ProcesoVotacion</h1>
+<h2>Proceso de Votacion</h2>
 
 
 
@@ -11,59 +11,61 @@
     <hr />
     <table class="table">
         <thead>
-            <tr>
-             <th>
+                <tr>
+                     <th>
                 
-             </th>
+                     </th>
               
-                <th>
+                    <th>
 
-                    @ViewBag.Puestoelegido
-                    @*@Html.DisplayFor(model=> model.PartidoPerteneceNavigation.N)*@
-                </th>
+                        @ViewBag.Puestoelegido
+                        @*@Html.DisplayFor(model=> model.PartidoPerteneceNavigation.N)*@
+                    </th>
              
-                <th></th>
-            </tr>
+                    <th>
+
+                    </th>
+                </tr>
         </thead>
 
         <tbody>
             @foreach (var item in Model)
             {
-            <td>
-                <a asp-action="Votar" asp-route-id="@item.PartidoPerteneceNavigation.IdPartidos">Votar</a>
-            </td>
-
-            var photoPath = "~/images/" + ((!string.IsNullOrEmpty(item.FotoPerfil) ? item.FotoPerfil : "download.jpg"));
-            var photoPath2 = "~/images/" + ((!string.IsNullOrEmpty(item.PartidoPerteneceNavigation.LogoPartido) ? item.PartidoPerteneceNavigation.LogoPartido : "Flag.png"));
-
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Nombre) 
-                     
-                    @Html.DisplayFor(modelItem => item.Apellido)
-                </td>
+           
                
-                <td>
-                    <img style="width: 100px;height: 100px" src="@photoPath" alt="Alternate Text" asp-append-version="true" />
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PartidoPerteneceNavigation.Nombre)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PuestoAspiraNavigation.Nombre)
-                </td>                
-                <td>
-                    <img style="width: 50px;height: 50px" src="@photoPath2" alt="Alternate Text" asp-append-version="true" />
-                </td>
+           
 
+                var photoPath = "~/images/" + ((!string.IsNullOrEmpty(item.FotoPerfil) ? item.FotoPerfil : "download.jpg"));
+                var photoPath2 = "~/images/" + ((!string.IsNullOrEmpty(item.PartidoPerteneceNavigation.LogoPartido) ? item.PartidoPerteneceNavigation.LogoPartido : "Flag.png"));
 
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Nombre) 
+                     
+                            @Html.DisplayFor(modelItem => item.Apellido)
+                        </td>
+               
+                        <td>
+                            <img style="width: 100px;height: 100px" src="@photoPath" alt="Alternate Text" asp-append-version="true" />
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PartidoPerteneceNavigation.Nombre)
+                        </td>
 
-            </tr>
-        }
+                        <td>
+                            <img style="width: 50px;height: 50px" src="@photoPath2" alt="Alternate Text" asp-append-version="true" />
+                        </td>
 
+                        <td>
+                    
+                           <a asp-action="Votar" asp-route-id="@item.IdCandidatos"  class="btn btn-danger">Votar</a>
+                        </td>
 
+                    </tr>
 
-            </tbody>
+             }
 
-        </table>  
+        </tbody>
+
+    </table>  
 </div>

@@ -4,40 +4,44 @@
     ViewData["Title"] = "Votacion";
 }
 
-<h1>Votacion</h1>
 
-<h2>@ViewBag.NombreSession @ViewBag.ApellidoSession</h2> <h2></h2>
+<h5>Bienvenido @ViewBag.NombreSession @ViewBag.ApellidoSession</h5>
+
+<h4>Seleccione un puesto al cual desea votar</h4>
+
 
 
 <table class=" table table-bordered"
       <tr>
-@*
-    <td>@Model.Cedula @ViewBag.ciudadano</td>*@
+    
+            @*<td>@Model.Cedula @ViewBag.ciudadano</td>*@
       </tr>
 
       <thead>
-        <tr>
-             <th>
-@Html.DisplayNameFor(model => model.Nombre)
-          </th>
+            <tr>
+                 <th>
+                         @Html.DisplayNameFor(model => model.Nombre)
+                 </th>
 
-        </tr>
+            </tr>
       </thead>
 
     <tbody>
 @foreach (var item in Model)
 {
-    <tr>
-    <td>
-    @Html.DisplayFor(model => item.Nombre)
-    </td>
+        <tr>
+            <td>
 
-    <td>
-    <a asp-action="ProcesoVotacion" asp-route-id="@item.IdPuestoE"  class="btn btn-info">Votar</a>
-    </td>
+                 @Html.DisplayFor(model => item.Nombre)
+
+            </td>
+
+            <td>
+                 <a asp-action="ProcesoVotacion" asp-route-id="@item.IdPuestoE"  class="btn btn-info">Selecciona</a>
+            </td>
 
 
-    </tr>
+        </tr>
 
 }
     </tbody>
