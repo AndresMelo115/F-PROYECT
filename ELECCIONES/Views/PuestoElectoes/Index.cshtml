@@ -35,7 +35,15 @@
                 @Html.DisplayFor(modelItem => item.Descripcion)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Estado)
+
+                @if (item.Estado == true)
+                {
+                    <p>Activo</p>
+                }
+                else
+                {
+                    <p>Inactivo</p>
+                }
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.IdPuestoE">Edit</a> |

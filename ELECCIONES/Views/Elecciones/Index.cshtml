@@ -6,8 +6,28 @@
 
 <h1>Index</h1>
 
+@{int count = 0; }
+@foreach (var item in Model)
+{
+    if (item.Estado == true)
+    {
+        count++;
+    }
+    else { }
+
+
+    @if (count == 1)
+    {
+    }
+    else
+    {<p>
+            <a asp-action="Create">Create New</a>
+        </p>}
+}
+
+
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Admin" asp-controller="Home">Regresar</a>
 </p>
 <table class="table">
     <thead>
@@ -25,31 +45,38 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaRealizacion)
-            </td>
-            <td>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaRealizacion)
+                </td>
+                <td>
 
-                @if (item.Estado == true)
-                {
-                    <p>En Curso</p>
-                }
-                else
-                {
-                    <p>Terminada</p>
-                }
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.IdElecciones">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.IdElecciones">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdElecciones">Delete</a>
-            </td>
-        </tr>
-}
+                    @if (item.Estado == true)
+                    {
+                        <p>En Curso</p>
+                    }
+                    else
+                    {
+                        <p>Terminada</p>
+                    }
+                </td>
+                <td>
+                    @if (item.Estado == true)
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.IdElecciones">Concluir</a>
+                    }
+                    else
+                    {
+                        <a asp-action="PostResult" asp-controller="Resultadoes" asp-route-id="@item.IdElecciones">Resultados</a>
+                    }
+
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

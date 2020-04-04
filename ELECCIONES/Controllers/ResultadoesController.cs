@@ -17,17 +17,73 @@ namespace ELECCIONES.Controllers
         {
             _context = context;
         }
-
+       
         // GET: Resultadoes
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int id)
         {
             var eleccionesContext = _context.Resultado.Include(r => r.IdCandidatosNavigation).Include(r => r.IdCiudadanosNavigation).Include(r => r.IdEleccionesNavigation);
+                              
+
+            //var query = (from re in _context.Resultado
+            //             join c in _context.Candidatos
+            //             on re.IdCandidatos equals c.IdCandidatos
+            //             join pl in _context.PuestoElecto
+            //             on c.PuestoAspira equals pl.IdPuestoE
+            //            where re.IdElecciones == id
+            //            select pl.IdPuestoE
+            //                         ).Distinct().ToList();
+            //ViewBag.F = query;
+
+            //var tessst = query;
+
+            //ViewBag.F = tessst;
+
             return View(await eleccionesContext.ToListAsync());
         }
 
+        public IActionResult PostResult()
+        {
+            
+            return View(_context.PuestoElecto.ToList());
+        }
+
+        //public async Task<IActionResult> unload(int? id)                          XXXXX EN CONSTRUCCION XXXX
+        //{
+
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var test2 = _context.PuestoElecto.Where(Pues => Pues.IdPuestoE == id).
+        //       FirstOrDefault();
+
+        //    var Result = _context.Resultado
+        //        .Where(res => res.IdCandidatosNavigation.PuestoAspira == id)
+        //      .Include(r => r.IdCandidatosNavigation)
+        //      .Include(r => r.IdCiudadanosNavigation)
+        //      .Include(r => r.IdEleccionesNavigation);
+
+        //    ViewBag.Puestoelegido = test2.Nombre;
+
+           
+
+        //    if (Result == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+
+
+
+        //    return View(await Result.ToListAsync());
+
+        //}
         // GET: Resultadoes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+
+
             if (id == null)
             {
                 return NotFound();

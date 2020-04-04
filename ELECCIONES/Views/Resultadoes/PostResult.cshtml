@@ -1,0 +1,48 @@
+﻿@model IEnumerable<ELECCIONES.Models.PuestoElecto>
+
+@{
+    ViewData["Title"] = "Resultados";
+}
+<a asp-action="Index" asp-controller="Elecciones">Regresar</a>
+<p> </p>
+
+<h4>Seleccione el puesto para ver el resultado</h4>
+
+
+
+<table class=" table table-bordered"
+      <tr>
+      </tr>
+      <thead>
+            <tr>
+                 <th>
+                         @Html.DisplayNameFor(model => model.Nombre)
+                 </th>
+            </tr>
+      </thead>
+
+      <tbody>
+
+          @foreach (var item in Model)
+          {
+
+              <tr>
+                  <td>
+
+                      @Html.DisplayFor(model => item.Nombre)
+
+                  </td>
+
+                  <td>
+                      @*<a asp-action="neigh" asp-route-id="@item.IdPuestoE" class="btn btn-info">Selecciona</a>*@
+                      <a asp-action="Index"  class="btn btn-info">Selecciona</a>
+
+                  </td>
+
+              </tr>
+
+          }
+
+      </tbody>
+
+</table>

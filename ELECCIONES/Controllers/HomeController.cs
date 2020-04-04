@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using ELECCIONES.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
@@ -14,12 +15,14 @@ using ELECCIONES.Email;
 
 namespace ELECCIONES.Controllers
 {
+    
     public class HomeController : Controller
     {
         private readonly Ciudadanos _ciudadanos;
         private readonly EleccionesContext _context;
         //private readonly PuestoElecto context;
         private readonly IEmailSender _emailSender;
+
 
         public HomeController(EleccionesContext context, IEmailSender emailSender)
         {
@@ -33,7 +36,7 @@ namespace ELECCIONES.Controllers
             return View("ProcesoVotacion","Resultadoes");
         }
 
-
+        [Authorize]
         public IActionResult Votacion()
         {
             //Ciudadanos ciudadanos = new Ciudadanos();
@@ -58,18 +61,38 @@ namespace ELECCIONES.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(Ciudadanos _ciudadanos)
       {
-            //Ciudadanos ciudadanos = new Ciudadanos();
             
 
+            //Ciudadanos ciudadanos = new Ciudadanos();
+            Resultado _resultado = new Resultado();
+            var antirepeti = _resultado.IdCiudadanos;
 
             EleccionesContext _context = new EleccionesContext();
 
             var test1 =  _context.Ciudadanos.Where(ced => ced.Cedula == _ciudadanos.Cedula).
-                FirstOrDefault();            
+                FirstOrDefault();    
+            var CurrentRes = _context.Resultado.Where(sid => sid.IdCiudadanos == test1.IdCiudadanos).FirstOrDefault();
+            var Currentelec = _context.Elecciones.Where(ele => ele.Estado == true).FirstOrDefault();
 
-            if(test1 == null)
+            
+            
+
+            if (test1 == null)
             {
                 ModelState.AddModelError("","Ciudadano no existe en el padron");
+                return View();
+            }
+
+            //if (Currentelec.Estado == null)
+            //{
+
+            //    ModelState.AddModelError("", "Ciudadano inactivo");
+            //    return View(_ciudadanos);
+            //}
+
+            if (CurrentRes.IdElecciones == Currentelec.IdElecciones)
+            {
+                ModelState.AddModelError("", "El ciudadano ya voto");
                 return View();
             }
 
@@ -173,9 +196,6 @@ namespace ELECCIONES.Controllers
         }
        public async  Task<IActionResult> Finalizar()
         {
-            
-
-
             var SendEmail = HttpContext.Session.GetString(Configuracion.KeyEmail);
 
             var voto = HttpContext.Session.GetString(Configuracion.Keyvoto);

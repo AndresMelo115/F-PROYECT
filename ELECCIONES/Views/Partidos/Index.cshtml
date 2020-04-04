@@ -43,7 +43,15 @@
                 @Html.DisplayFor(modelItem => item.LogoPartido)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Estado)
+
+                @if (item.Estado == true)
+                {
+                    <p>Activo</p>
+                }
+                else
+                {
+                    <p>Inactivo</p>
+                }
             </td>
             <td>
                 <img style="width: 200px;height: 200px" src="@photoPath" alt="Alternate Text" asp-append-version="true" />
