@@ -75,20 +75,42 @@ namespace ELECCIONES.Controllers
             EleccionesContext _context = new EleccionesContext();
 
             var test1 =  _context.Ciudadanos.Where(ced => ced.Cedula == _ciudadanos.Cedula).
-                FirstOrDefault();    
-            var CurrentRes = _context.Resultado.Where(sid => sid.IdCiudadanos == test1.IdCiudadanos).FirstOrDefault();
+                FirstOrDefault();
+
             var Currentelec = _context.Elecciones.Where(ele => ele.Estado == true).FirstOrDefault();
 
-            
-            
+            var CurrentRes = _context.Resultado.Where(Res =>Res.IdElecciones == Currentelec.IdElecciones).FirstOrDefault();
+
+            HttpContext.Session.SetInt32(Configuracion.KeyCedudala, test1.IdCiudadanos);
+
+            //var Currentced = HttpContext.Session.GetInt32(Configuracion.KeyCedudala);
+
+            //var Norepeat = CurrentRes.IdCiudadanos.where(CurrentRes.IdCiudadanos== Currentced) FirstOrDefault;
+
+
+
+            var yesnoelec = _context.Elecciones.Where(ele => ele.Estado == true).
+              FirstOrDefault();
+
 
             if (test1 == null)
             {
                 ModelState.AddModelError("","Ciudadano no existe en el padron");
                 return View();
             }
+             if (test1.Estado == false)
+            {
 
+                ModelState.AddModelError("", "Ciudadano inactivo");
+                return View(_ciudadanos);
+            }
 
+            if (yesnoelec == null)
+            {
+                ModelState.AddModelError("", "No hay votaciones abiertas en este momento");
+                return View();
+            }
+           
 
             //if (CurrentRes.IdElecciones == Currentelec.IdElecciones)
             //{
@@ -96,13 +118,8 @@ namespace ELECCIONES.Controllers
             //    return View();
             //}
 
-            if (test1.Estado == false)
-            {
-
-                ModelState.AddModelError("","Ciudadano inactivo");
-                return View(_ciudadanos);
-            }
-            HttpContext.Session.SetInt32(Configuracion.KeyCedudala, test1.IdCiudadanos);
+           
+           
             HttpContext.Session.SetString(Configuracion.KeyNombre,test1.Nombre);
             HttpContext.Session.SetString(Configuracion.KeyApellido,test1.Apellido);
             HttpContext.Session.SetString(Configuracion.KeyEmail, test1.Email);
