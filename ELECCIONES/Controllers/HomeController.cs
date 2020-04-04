@@ -8,6 +8,9 @@ using ELECCIONES.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using ELECCIONES.Helper;
+using ELECCIONES.Email;
+
+
 
 namespace ELECCIONES.Controllers
 {
@@ -16,10 +19,13 @@ namespace ELECCIONES.Controllers
         private readonly Ciudadanos _ciudadanos;
         private readonly EleccionesContext _context;
         //private readonly PuestoElecto context;
-        
-        public HomeController(EleccionesContext context)
+        private readonly IEmailSender _emailSender;
+
+        public HomeController(EleccionesContext context, IEmailSender emailSender)
         {
             this._context = context;
+            this._emailSender = emailSender;
+            
         }  
 
         public IActionResult Resultado()
@@ -31,9 +37,10 @@ namespace ELECCIONES.Controllers
         public IActionResult Votacion()
         {
             //Ciudadanos ciudadanos = new Ciudadanos();
-
+            ViewBag.etc = HttpContext.Session.GetString(Configuracion.Keybtndel);
             ViewBag.NombreSession = HttpContext.Session.GetString(Configuracion.KeyNombre);
             ViewBag.ApellidoSession = HttpContext.Session.GetString(Configuracion.KeyApellido);
+            ViewBag.Debuttoner = HttpContext.Session.GetString(Configuracion.Keybtndel);
 
             return View(_context.PuestoElecto.ToList());
         }       
@@ -42,7 +49,8 @@ namespace ELECCIONES.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-           
+            
+  
             return View();
         }
 
@@ -74,11 +82,16 @@ namespace ELECCIONES.Controllers
             HttpContext.Session.SetInt32(Configuracion.KeyCedudala, test1.IdCiudadanos);
             HttpContext.Session.SetString(Configuracion.KeyNombre,test1.Nombre);
             HttpContext.Session.SetString(Configuracion.KeyApellido,test1.Apellido);
+            HttpContext.Session.SetString(Configuracion.KeyEmail, test1.Email);
+          
+
             return RedirectToAction("votacion");
 
         }
         public async Task <IActionResult> ProcesoVotacion(int? id)
         {
+          
+
             if (id == null)
             {
                 return NotFound();
@@ -94,12 +107,16 @@ namespace ELECCIONES.Controllers
 
             ViewBag.Puestoelegido = test2.Nombre;
 
-
+            HttpContext.Session.SetString(Configuracion.Keypuesto, test2.Nombre);
 
             if (Candidatos == null)
             {
                 return NotFound();
             }
+
+
+            
+
             return View(await Candidatos.ToListAsync());
 
         }
@@ -110,29 +127,70 @@ namespace ELECCIONES.Controllers
         //    return View();
         //}
 
-        
-        public async Task<IActionResult> Votar( int? id)
+
+        public async Task<IActionResult> Votar(int? id)
         {
+
             Resultado _resultado = new Resultado();
             var Test3 = _context.Elecciones.Where(ele => ele.Estado == true).
-               FirstOrDefault(); 
+               FirstOrDefault();
+
+            var votedcand = _context.Candidatos.Where(idcan => idcan.IdCandidatos == id).
+            FirstOrDefault();
+
+
+
+            
+            string puestoname = HttpContext.Session.GetString(Configuracion.Keypuesto);
+            string puestosav = HttpContext.Session.GetString(Configuracion.Keybtndel);
+            puestosav = puestosav + " " + puestoname ;
+            HttpContext.Session.SetString(Configuracion.Keybtndel, puestosav);
+
+
+            string NomApePues = votedcand.Nombre +"  "+votedcand.Apellido + " como: " + puestoname;
+            string voto = HttpContext.Session.GetString(Configuracion.Keyvoto);
+            voto = voto + " " + NomApePues;
+            HttpContext.Session.SetString(Configuracion.Keyvoto, voto);
+
+
             
 
             if (ModelState.IsValid)
             {
                 _resultado.IdCandidatos = id;
                 _resultado.IdCiudadanos = HttpContext.Session.GetInt32(Configuracion.KeyCedudala);
-                _resultado.IdElecciones =Test3.IdElecciones;
+                _resultado.IdElecciones = Test3.IdElecciones;
+
 
                 _context.Add(_resultado);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Votacion));
             }
-        
-            return View("Votacion");
+
+
+
+            return RedirectToAction(nameof(Votacion));
         }
+       public async  Task<IActionResult> Finalizar()
+        {
+            
 
 
+            var SendEmail = HttpContext.Session.GetString(Configuracion.KeyEmail);
+
+            var voto = HttpContext.Session.GetString(Configuracion.Keyvoto);
+
+            var ciudadano = HttpContext.Session.GetString(Configuracion.KeyNombre) + " " + HttpContext.Session.GetString(Configuracion.KeyApellido); 
+
+            var message = new Message(new string[] { SendEmail }, "Elecciones Primarias", "Saludos"+" "+ ciudadano +" "+ " Este correo se" +" "+
+                " le envia con la finalidad de indicarle que usted voto por " + voto + "   "+ "!!!Gracias por cumplir con su deber como ciudadano!!!");
+
+            await _emailSender.SendEmailAsync(message);
+
+            HttpContext.Session.Clear();
+
+            return View("Index");
+        }
 
         public IActionResult admin()
         {

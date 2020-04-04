@@ -13,7 +13,7 @@
 
 <table class=" table table-bordered"
       <tr>
-    
+
             @*<td>@Model.Cedula @ViewBag.ciudadano</td>*@
       </tr>
 
@@ -26,24 +26,43 @@
             </tr>
       </thead>
 
-    <tbody>
-@foreach (var item in Model)
-{
-        <tr>
-            <td>
+      <tbody>
+          @{ int contadorval1 = 0;
+              int contadorval2 = 0; }
+          @foreach (var item in Model)
+          {
+              contadorval1++;
+              <tr>
+                  <td>
 
-                 @Html.DisplayFor(model => item.Nombre)
+                      @Html.DisplayFor(model => item.Nombre)
 
-            </td>
+                  </td>
 
-            <td>
-                 <a asp-action="ProcesoVotacion" asp-route-id="@item.IdPuestoE"  class="btn btn-info">Selecciona</a>
-            </td>
+                  <td>
+                      @{ var permicion = ViewBag.Debuttoner + " ";
+
+                          if (permicion.Contains(item.Nombre))
+                          {
+                              contadorval2++;
+                          }
+                          else
+                          { <a asp-action="ProcesoVotacion" asp-route-id="@item.IdPuestoE" class="btn btn-info">Selecciona</a>}
+                      }
+
+                  </td>
 
 
-        </tr>
+              </tr>
 
-}
-    </tbody>
+          }
+
+      </tbody>
 
 </table>
+@if (contadorval1 == contadorval2)
+{
+    {
+        <a asp-action="Finalizar" class="btn btn-danger">Finalizar</a>}
+}
+else { }

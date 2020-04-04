@@ -10,6 +10,7 @@ using MailKit.Net.Smtp;
 namespace ELECCIONES.Email
 {
     public class EmailSenderGmail : IEmailSender
+
     {
         private readonly EmailConfiguration _emailConfiguration;
 

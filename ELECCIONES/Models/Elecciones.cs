@@ -13,7 +13,8 @@ namespace ELECCIONES.Models
 
         public int IdElecciones { get; set; }
         public string Nombre { get; set; }
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        //[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        [DataType(DataType.Date)]
         public DateTime FechaRealizacion { get; set; }
         public bool Estado { get; set; }
 

@@ -19,15 +19,15 @@ namespace ELECCIONES.Controllers
     public class CiudadanosController : Controller
     {
         private readonly EleccionesContext _context;
-        private readonly IEmailSender _emailSender;
+        //private readonly IEmailSender _emailSender;
 
 
      
 
-        public CiudadanosController(EleccionesContext context, IEmailSender emailSender)
+        public CiudadanosController(EleccionesContext context /*, IEmailSender emailSender*/)
         {
             _context = context;
-            this._emailSender = emailSender;
+           // this._emailSender = emailSender;
         }
 
         // GET: Ciudadanos
@@ -35,9 +35,9 @@ namespace ELECCIONES.Controllers
         {
             
 
-            var message = new Message(new string[] { "Sandy.encarnacion.se@gmail.com" }, "Test Email", "Viendo KLOK con esto");
+            //var message = new Message(new string[] { "Sandy.encarnacion.se@gmail.com" }, "Test Email", "Viendo KLOK con esto");
 
-            await _emailSender.SendEmailAsync(message);
+            //await _emailSender.SendEmailAsync(message);
 
             return View(await _context.Ciudadanos.ToListAsync());
                        

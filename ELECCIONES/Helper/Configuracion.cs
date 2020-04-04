@@ -13,6 +13,13 @@ namespace ELECCIONES.Helper
 
         public static string KeyCedudala => " _Cedul";
 
+        public static string Keybtndel => " _btndel";
+
+        public static string Keypuesto => " _Puest";
+
+        public static string KeyEmail => "_Email";
+
+        public static string Keyvoto => " _voto";
 
     }
 }
