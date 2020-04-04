@@ -21,5 +21,6 @@ namespace ELECCIONES.Helper
 
         public static string Keyvoto => " _voto";
 
+        public static string Keyelec => " _elect";
     }
 }

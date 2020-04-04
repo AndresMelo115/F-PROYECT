@@ -67,6 +67,7 @@ namespace ELECCIONES.Controllers
                 {
                     return RedirectToAction("Admin", "Home");
                 }
+                
 
                 
                 ModelState.AddModelError(string.Empty, "Tu ta feo wawawaaaaaa.........");

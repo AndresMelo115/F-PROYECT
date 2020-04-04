@@ -1,48 +1,76 @@
-﻿@model IEnumerable<ELECCIONES.Models.PuestoElecto>
+﻿
+@model IEnumerable<ELECCIONES.Models.Candidatos>
 
 @{
-    ViewData["Title"] = "Resultados";
+    ViewData["Title"] = "Candidatos";
 }
-<a asp-action="Index" asp-controller="Elecciones">Regresar</a>
-<p> </p>
 
-<h4>Seleccione el puesto para ver el resultado</h4>
+<h1>Candidatos</h1>
 
+<p>
+    <a class="btn btn-light" asp-action="Index"
+       asp-controller="Resultadoes" asp-route-id="@ViewBag.idEleccion">Volver al Menu Anterior</a>
+</p>
 
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FotoPerfil)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Apellido)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PartidoPerteneceNavigation)
+            </th>
+            <th>
+                Cantidad de Votos
+            </th>
+         
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            List<Candidatos> list = ViewBag.List;
+            int count;
+        }
 
-<table class=" table table-bordered"
-      <tr>
-      </tr>
-      <thead>
-            <tr>
-                 <th>
-                         @Html.DisplayNameFor(model => model.Nombre)
-                 </th>
+        @foreach (var item in Model)
+        {
+            count = 0;
+            foreach (var item2 in list)
+            {
+                if (item.Nombre== item2.Nombre)
+                {
+                    count++;
+                }
+
+            }
+
+            var photoPath = "~/images/" + ((!string.IsNullOrEmpty(item.FotoPerfil) ? item.FotoPerfil : "download.jpg"));
+            <tr class="font-weight-bold">
+                <td>
+                    <img style="width: 200px;height: 200px" src="@photoPath" alt="Alternate Text" asp-append-version="true" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Apellido)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.PartidoPerteneceNavigation.Descripcion)
+                </td>
+                <td>
+                    @count
+                </td>
+                <td></td>
             </tr>
-      </thead>
-
-      <tbody>
-
-          @foreach (var item in Model)
-          {
-
-              <tr>
-                  <td>
-
-                      @Html.DisplayFor(model => item.Nombre)
-
-                  </td>
-
-                  <td>
-                      @*<a asp-action="neigh" asp-route-id="@item.IdPuestoE" class="btn btn-info">Selecciona</a>*@
-                      <a asp-action="Index"  class="btn btn-info">Selecciona</a>
-
-                  </td>
-
-              </tr>
-
-          }
-
-      </tbody>
-
+        }
+    </tbody>
 </table>

@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ELECCIONES.Models;
+using ELECCIONES.Helper;
+using Microsoft.AspNetCore.Http;
 
 namespace ELECCIONES.Controllers
 {
@@ -21,30 +23,78 @@ namespace ELECCIONES.Controllers
         // GET: Resultadoes
         public async Task<IActionResult> Index(int id)
         {
-            var eleccionesContext = _context.Resultado.Include(r => r.IdCandidatosNavigation).Include(r => r.IdCiudadanosNavigation).Include(r => r.IdEleccionesNavigation);
-                              
-
-            //var query = (from re in _context.Resultado
-            //             join c in _context.Candidatos
-            //             on re.IdCandidatos equals c.IdCandidatos
-            //             join pl in _context.PuestoElecto
-            //             on c.PuestoAspira equals pl.IdPuestoE
-            //            where re.IdElecciones == id
-            //            select pl.IdPuestoE
-            //                         ).Distinct().ToList();
+            var eleccionesContext = _context.Resultado.Include(r => r.IdCandidatosNavigation).Include(r => r.IdCiudadanosNavigation).Include(r => r.IdEleccionesNavigation);          
+            HttpContext.Session.SetInt32(Configuracion.Keyelec, id);
+           
+            var query = (from re in _context.Resultado
+                         join c in _context.Candidatos
+                         on re.IdCandidatos equals c.IdCandidatos
+                         join pl in _context.PuestoElecto
+                         on c.PuestoAspira equals pl.IdPuestoE
+                         where re.IdElecciones == id
+                         select pl.IdPuestoE
+                                                ).Distinct().ToList();
             //ViewBag.F = query;
 
-            //var tessst = query;
+            List<PuestoElecto> puestoElectos = new List<PuestoElecto>();
 
-            //ViewBag.F = tessst;
+            foreach (var item in query)
+            {
+                puestoElectos.Add(_context.PuestoElecto.Find(item));
+            }
 
-            return View(await eleccionesContext.ToListAsync());
+            return View(puestoElectos);
+
         }
 
-        public IActionResult PostResult()
-        {
-            
-            return View(_context.PuestoElecto.ToList());
+        public IActionResult PostResult(int? id)        {              
+    
+                var idEleccion = HttpContext.Session.GetInt32(Configuracion.Keyelec);
+
+                ViewBag.idEleccion = idEleccion;
+
+                var context = (from re in _context.Resultado
+                               join c in _context.Candidatos
+                               on re.IdCandidatos equals c.IdCandidatos
+                               join pl in _context.PuestoElecto
+                               on c.PuestoAspira equals pl.IdPuestoE
+                               where re.IdElecciones == idEleccion &&
+                               pl.IdPuestoE == id
+                               select new Candidatos
+                               {
+                                   IdCandidatos = c.IdCandidatos,
+                                   Nombre = c.Nombre,
+                                   Apellido = c.Apellido,
+                                   PartidoPerteneceNavigation = c.PartidoPerteneceNavigation,
+                                   FotoPerfil = c.FotoPerfil,
+
+                               }
+                               ).Distinct();
+
+                var listCandidatosFull = (from re in _context.Resultado
+                                          join c in _context.Candidatos
+                                          on re.IdCandidatos equals c.IdCandidatos
+                                          join pl in _context.PuestoElecto
+                                          on c.PuestoAspira equals pl.IdPuestoE
+                                          where re.IdElecciones == idEleccion &&
+                                          pl.IdPuestoE == id
+                                          select new Candidatos
+                                          {
+                                              IdCandidatos = c.IdCandidatos,
+                                              Nombre = c.Nombre,
+                                              Apellido = c.Apellido,
+                                              PartidoPerteneceNavigation = c.PartidoPerteneceNavigation,
+                                              FotoPerfil = c.FotoPerfil,
+
+                                          }
+                                         ).ToList();
+
+                ViewBag.List = listCandidatosFull;
+
+
+                return View(context);              
+
+
         }
 
         //public async Task<IActionResult> unload(int? id)                          XXXXX EN CONSTRUCCION XXXX

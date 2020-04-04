@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using ELECCIONES.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
@@ -13,19 +14,23 @@ using ELECCIONES.Email;
 
 
 
+
 namespace ELECCIONES.Controllers
 {
     
     public class HomeController : Controller
     {
+        private readonly SignInManager<IdentityUser> _signInManager;
         private readonly Ciudadanos _ciudadanos;
         private readonly EleccionesContext _context;
         //private readonly PuestoElecto context;
         private readonly IEmailSender _emailSender;
 
 
-        public HomeController(EleccionesContext context, IEmailSender emailSender)
+        public HomeController(EleccionesContext context, IEmailSender emailSender, SignInManager<IdentityUser> signInManager)
         {
+            this._signInManager = signInManager;
+           
             this._context = context;
             this._emailSender = emailSender;
             
@@ -36,7 +41,6 @@ namespace ELECCIONES.Controllers
             return View("ProcesoVotacion","Resultadoes");
         }
 
-        [Authorize]
         public IActionResult Votacion()
         {
             //Ciudadanos ciudadanos = new Ciudadanos();
@@ -52,8 +56,9 @@ namespace ELECCIONES.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            
-  
+            if (_signInManager.IsSignedIn(User))
+                return RedirectToAction("Admin", "Home");
+
             return View();
         }
 
@@ -83,18 +88,13 @@ namespace ELECCIONES.Controllers
                 return View();
             }
 
-            //if (Currentelec.Estado == null)
+
+
+            //if (CurrentRes.IdElecciones == Currentelec.IdElecciones)
             //{
-
-            //    ModelState.AddModelError("", "Ciudadano inactivo");
-            //    return View(_ciudadanos);
+            //    ModelState.AddModelError("", "El ciudadano ya voto");
+            //    return View();
             //}
-
-            if (CurrentRes.IdElecciones == Currentelec.IdElecciones)
-            {
-                ModelState.AddModelError("", "El ciudadano ya voto");
-                return View();
-            }
 
             if (test1.Estado == false)
             {
@@ -112,8 +112,7 @@ namespace ELECCIONES.Controllers
 
         }
         public async Task <IActionResult> ProcesoVotacion(int? id)
-        {
-          
+        {         
 
             if (id == null)
             {
@@ -213,7 +212,8 @@ namespace ELECCIONES.Controllers
         }
 
         public IActionResult admin()
-        {
+        {            
+
             //Ciudadanos cedula = new Ciudadanos();
             return View("Adminpage");
         }
